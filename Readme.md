@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг»
 
 * Студент: [Виктория Кашина](https://up.htmlacademy.ru/javascript/27/user/186965).
-* Наставник: `Неизвестно`.
+* Наставник: [Анастасия Васинская](https://htmlacademy.ru/profile/vanastasiya).
 
 ---
 
