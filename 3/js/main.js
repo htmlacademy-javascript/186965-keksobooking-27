@@ -35,15 +35,13 @@ function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-getRandomNumber(10, 137);
 
-
-function getRandomCoordinate(min, max, number = 1) {
+function getRandomCoordinate(min, max, number) {
   if(min >= max || min < 0 || max < 0) {
     return NaN;
   }
 
-  min = Math.ceil(min);
+  min = Math.floor(min);
   max = Math.floor(max);
 
   const randomNumber = Math.random() * (max - min + 1) + min; // Максимум и минимум включаются
@@ -51,8 +49,6 @@ function getRandomCoordinate(min, max, number = 1) {
 
   return coordinate;
 }
-
-getRandomCoordinate(10, 100, 13);
 
 
 const createAuthorAvatar = (number) => {
@@ -67,18 +63,13 @@ const createAuthorAvatar = (number) => {
 
 createAuthorAvatar(AVATARS_NUMBER);
 
-const createLocationCoordinates = (startNumber, endNumber, number = 1) => {
-  const lat = getRandomCoordinate(startNumber, endNumber, number);
-  const lng = getRandomCoordinate(startNumber, endNumber, number);
-
-  return [lat, lng];
-};
-
-
 const getRandomArrayElement = (elements) => elements[getRandomNumber(0, elements.length - 1)];
 
 const createSimilarAd = () => {
   for(let i = 0; i < ADS_NUMBER; i++) {
+    const lat = getRandomCoordinate(35.65000, 35.70000, 5);
+    const lng = getRandomCoordinate(139.70000, 139.80000, 5);
+
     const newAd = {
       author: {
         avatar: adsAuthorAvatars[i],
@@ -86,8 +77,8 @@ const createSimilarAd = () => {
       offer: {
         title: getRandomArrayElement(ADS_TITLES),
         address: {
-          lat: createLocationCoordinates(10, 500)[0],
-          lng: createLocationCoordinates(30, 600)[1],
+          lat,
+          lng,
         },
         price: getRandomNumber(1, 1000),
         type: getRandomArrayElement(HOUSES_TYPES),
@@ -100,8 +91,8 @@ const createSimilarAd = () => {
         photos: ADS_PHOTOS.slice(getRandomNumber(0, ADS_PHOTOS.length - 1), getRandomNumber(0, ADS_PHOTOS.length - 1))
       },
       location: {
-        lat: createLocationCoordinates(35.65, 35.7, getRandomNumber(1, 20))[0],
-        lng: createLocationCoordinates(139.7, 139.8, getRandomNumber(1, 20))[1],
+        lat,
+        lng,
       }
     };
 
@@ -111,3 +102,4 @@ const createSimilarAd = () => {
 
 
 createSimilarAd();
+
