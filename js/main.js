@@ -86,8 +86,8 @@ const createSimilarAd = () => {
       offer: {
         title: getRandomArrayElement(ADS_TITLES),
         address: {
-          lat: createLocationCoordinates(10, 500)[0],
-          lng: createLocationCoordinates(30, 600)[1],
+          lat: createLocationCoordinates(35.65000, 35.70000, getRandomNumber(1, 5))[0],
+          lng: createLocationCoordinates(139.70000, 139.80000, getRandomNumber(1, 5))[1],
         },
         price: getRandomNumber(1, 1000),
         type: getRandomArrayElement(HOUSES_TYPES),
@@ -100,8 +100,8 @@ const createSimilarAd = () => {
         photos: ADS_PHOTOS.slice(getRandomNumber(0, ADS_PHOTOS.length - 1), getRandomNumber(0, ADS_PHOTOS.length - 1))
       },
       location: {
-        lat: createLocationCoordinates(35.65, 35.7, getRandomNumber(1, 20))[0],
-        lng: createLocationCoordinates(139.7, 139.8, getRandomNumber(1, 20))[1],
+        lat: createLocationCoordinates(35.65000, 35.70000, getRandomNumber(1, 5))[0],
+        lng: createLocationCoordinates(139.70000, 139.80000, getRandomNumber(1, 5))[1],
       }
     };
 
