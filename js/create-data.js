@@ -19,14 +19,12 @@ const HOUSES_DESCRIPTION = [
   'Сдается квартира студия в новом доме, от метро 10 мин транспортом. Для 1-2х граждан.'];
 const ADS_PHOTOS = ['https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg', 'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg', 'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'];
 
-
-const adsAuthorAvatars = [];
 const similarAds = [];
-
+const adsAuthorAvatars = [];
 
 const createAuthorAvatar = (number) => {
-  for(let i = 1; i <= number; i++) {
-    if(i <= 9) {
+  for (let i = 1; i <= number; i++) {
+    if (i <= 9) {
       i = `0${i}`;
     }
 
@@ -70,7 +68,9 @@ const createSimilarAd = () => {
 
     similarAds.push(newAd);
   }
+
 };
 
+createSimilarAd();
 
-export { createSimilarAd };
+export { createSimilarAd, similarAds };
