@@ -2,7 +2,7 @@ import { similarAds } from './create-data.js';
 import { inflectWord } from './utils.js';
 
 
-const HOUSES_COMPARE = {
+const houseCompare = {
   'flat': 'Квартира',
   'bungalow': 'Бунгало',
   'house': 'Дом',
@@ -10,8 +10,8 @@ const HOUSES_COMPARE = {
   'hotel': 'Отель'
 };
 
-const adTemplate = document.querySelector('#card').content.querySelector('.popup'); // шаблон карточки объявления
-const similarAdsList = document.querySelector('#map-canvas'); // куда будет вставляться похожие объявления
+const adTemplateElement = document.querySelector('#card').content.querySelector('.popup'); // шаблон карточки объявления
+const similarAdsListElement = document.querySelector('#map-canvas'); // куда будет вставляться похожие объявления
 
 
 const createHouseCapacityDescription = (item, element) => {
@@ -51,10 +51,10 @@ const createFlatPhotos = (items, element) => {
   items.offer.photos.forEach((item) => {
     const photo = document.createElement('img');
     photo.classList.add('popup__photo');
-    photo.setAttribute('width', '45');
-    photo.setAttribute('height', '40');
-    photo.setAttribute('alt', 'Фотография жилья');
-    photo.setAttribute('src', item);
+    photo.width = 45;
+    photo.height = 40;
+    photo.alt = 'Фотография жилья';
+    photo.src = `${item}`;
 
     photoBoxElement.append(photo);
   });
@@ -64,7 +64,7 @@ const createFlatPhotos = (items, element) => {
 
 
 similarAds.forEach((ad) => {
-  const adElement = adTemplate.cloneNode(true);
+  const adElement = adTemplateElement.cloneNode(true);
   const houseFeatures = ad.offer.features;
 
   adElement.querySelector('.popup__title').textContent = ad.offer.title;
@@ -72,7 +72,7 @@ similarAds.forEach((ad) => {
 
 
   adElement.querySelector('.popup__text--price').textContent = `${ad.offer.price} ₽/ночь`;
-  adElement.querySelector('.popup__type').textContent = HOUSES_COMPARE[ad.offer.type];
+  adElement.querySelector('.popup__type').textContent = houseCompare[ad.offer.type];
 
   createHouseCapacityDescription(ad, adElement);
 
@@ -86,5 +86,5 @@ similarAds.forEach((ad) => {
 
   adElement.querySelector('.popup__avatar').src = ad.author.avatar;
 
-  similarAdsList.append(adElement);
+  similarAdsListElement.append(adElement);
 });

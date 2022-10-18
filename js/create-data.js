@@ -1,6 +1,6 @@
 import { getRandomNumber, getRandomCoordinate, getRandomArrayElement } from './utils.js';
 
-const ADS_NUMBER = 10;
+// const ADS_NUMBER = 10;
 const AVATARS_NUMBER = 10;
 const ADS_TITLES = ['Вашему вниманию предлагается просторная квартира', 'Сдается полностью укомплектованная, уютная, квартира', 'Сдам уютную квартиру на длительный срок от собственника', 'Сдается квартира. Полностью меблированная', 'Сдаётся от собственника без комиссии на длительный срок уютная, светлая квартира', 'Сдаётся отличная квартира, после ремонта', 'Сдаётся жилье, ранее жил сам собственник', 'Сдаётся на длительный срок прекрасная квартира', 'Предлагается в аренду квартира', 'Сдаётся просторная квартира в новом жилом комплексе'];
 const HOUSES_TYPES = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
@@ -35,8 +35,8 @@ const createAuthorAvatar = (number) => {
 createAuthorAvatar(AVATARS_NUMBER);
 
 
-const createSimilarAd = () => {
-  for(let i = 0; i < ADS_NUMBER; i++) {
+const createSimilarAd = (amount) => {
+  for(let i = 0; i < amount; i++) {
     const lat = getRandomCoordinate(35.65000, 35.70000, 5);
     const lng = getRandomCoordinate(139.70000, 139.80000, 5);
 
@@ -71,6 +71,6 @@ const createSimilarAd = () => {
 
 };
 
-createSimilarAd();
+createSimilarAd(1);
 
 export { createSimilarAd, similarAds };
