@@ -36,4 +36,4 @@ const setActiveFormState = () => {
   });
 };
 
-// setActiveFormState();
+setActiveFormState();
