@@ -1048,3 +1048,12 @@ fieldset {
 .hidden {
   display: none;
 }
+
+
+.pristine-error.form__error {
+  margin-top: 5px;
+  display: block;
+  margin-bottom: 15px;
+  color:red;
+  font-weight: 700;
+}

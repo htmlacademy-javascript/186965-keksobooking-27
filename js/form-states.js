@@ -37,3 +37,6 @@ const setActiveFormState = () => {
 };
 
 setActiveFormState();
+
+
+export { adFormElement };
