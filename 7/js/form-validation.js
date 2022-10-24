@@ -1,6 +1,10 @@
 import { adFormElement } from './form-states.js';
 import { inflectWord } from './utils.js';
 
+
+const MIN_TITLE_LENGTH = 30;
+const MAX_TITLE_LENGTH = 100;
+const MAX_PRICE = 100000;
 const adTitleElement = adFormElement.querySelector('#title');
 const adPriceElement = adFormElement.querySelector('#price');
 const adRoomNumberElement = adFormElement.querySelector('#room_number');
@@ -21,10 +25,10 @@ const pristine = new Pristine(adFormElement, {
 });
 
 
-const validateAdTitle = (value) => value.length >= 30 && value.length <= 100;
+const validateAdTitle = (value) => value.length >= MIN_TITLE_LENGTH && value.length <= MAX_TITLE_LENGTH;
 pristine.addValidator(adTitleElement, validateAdTitle, 'Обязательное поле. От 30 до 100 символов');
 
-const validatePrice = (value) => value <= 100000;
+const validatePrice = (value) => value <= MAX_PRICE;
 pristine.addValidator(adPriceElement, validatePrice, 'Обязательно поле. Не более 100000 ₽/ночь');
 
 
