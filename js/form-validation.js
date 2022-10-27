@@ -95,7 +95,6 @@ const setCheckInTime = () => {
 
 const setCheckOutTime = () => {
   const checkInTime = adCheckInTimeElement.value;
-
   adCheckOutTimeElement.value = checkInTime;
 };
 
