@@ -16,12 +16,13 @@ const adCheckInTimeElement = adFormElement.querySelector('#timein');
 const adCheckOutTimeElement = adFormElement.querySelector('#timeout');
 
 
-const roomsAndGuestsCompare = {
-  '1': ['1'],
-  '2': ['1', '2'],
-  '3': ['1', '2', '3'],
-  '100': ['0']
+const roomsToGuests = {
+  1: ['1'],
+  2: ['1', '2'],
+  3: ['1', '2', '3'],
+  100: ['0']
 };
+
 
 const minRoomPrice = {
   'bungalow': 0,
@@ -31,6 +32,7 @@ const minRoomPrice = {
   'palace': 10000
 };
 
+adPriceElement.placeholder = minRoomPrice[adRoomTypeElement.value];
 
 const pristine = new Pristine(adFormElement, {
   classTo: 'ad-form__element',
@@ -42,36 +44,56 @@ const pristine = new Pristine(adFormElement, {
 
 // Валидация заголовка объявления
 const validateAdTitle = (value) => value.length >= MIN_TITLE_LENGTH && value.length <= MAX_TITLE_LENGTH;
-pristine.addValidator(adTitleElement, validateAdTitle, 'Обязательное поле. От 30 до 100 символов');
+
+pristine.addValidator(adTitleElement, validateAdTitle, 'От 30 до 100 символов');
+
 
 // Валидация цены объявления
-const validatePrice = (value) => {
-  const houseType = adRoomTypeElement.value;
+const validatePrice = (value) => +value && value <= MAX_PRICE;
 
-  return (+value.length && +value >= minRoomPrice[houseType]) && (value <= MAX_PRICE);
-};
+pristine.addValidator(adPriceElement, validatePrice, `Максимальная цена ${MAX_PRICE} ₽/ночь.`);
 
 
 // Валидация количества гостей и комнат
-const validateAmountOfRoomsAndGuests = () => roomsAndGuestsCompare[adRoomNumberElement.value].includes(adRoomCapacityElement.value);
+const validateAmountOfGuests = () => roomsToGuests[adRoomNumberElement.value].includes(adRoomCapacityElement.value);
+
+const onCapacityChange = () => {
+  pristine.validate(adRoomCapacityElement);
+  pristine.validate(adRoomNumberElement);
+};
+
+const onRoomNumberChange = () => {
+  pristine.validate(adRoomCapacityElement);
+  pristine.validate(adRoomNumberElement);
+};
 
 const getRoomsErrorMessage = () => {
   if(adRoomNumberElement.value === '100') {
     return 'не для гостей';
   }
 
-  return `${adRoomNumberElement.value} ${inflectWord(adRoomNumberElement.value, wordRoomOptions)} для ${roomsAndGuestsCompare[adRoomNumberElement.value]} ${inflectWord(roomsAndGuestsCompare[adRoomNumberElement.value], wordRoomCapacityOptions)}`;
+  return `${adRoomNumberElement.value} ${inflectWord(adRoomNumberElement.value, wordRoomOptions)} для ${roomsToGuests[adRoomNumberElement.value]} ${inflectWord(roomsToGuests[adRoomNumberElement.value], wordRoomCapacityOptions)}`;
 };
 
-pristine.addValidator(adRoomNumberElement, validateAmountOfRoomsAndGuests, getRoomsErrorMessage);
-pristine.addValidator(adRoomCapacityElement, validateAmountOfRoomsAndGuests, getRoomsErrorMessage);
+pristine.addValidator(adRoomNumberElement, validateAmountOfGuests, getRoomsErrorMessage);
+pristine.addValidator(adRoomCapacityElement, validateAmountOfGuests, getRoomsErrorMessage);
+
+adRoomCapacityElement.addEventListener('change', onCapacityChange);
+adRoomNumberElement.addEventListener('change', onRoomNumberChange);
 
 
 // Валидация типа квартиры и цены
 
+const validateMinHousePrice = (value) => {
+  const houseType = adRoomTypeElement.value;
+  return value >= minRoomPrice[houseType];
+};
+
 const onHouseTypeChange = () => {
   const houseType = adRoomTypeElement.value;
   adPriceElement.placeholder = minRoomPrice[houseType];
+  adPriceElement.min = minRoomPrice[houseType];
+  adPriceElement.max = `${MAX_PRICE}`;
   pristine.validate(adRoomTypeElement);
 };
 
@@ -80,11 +102,10 @@ adRoomTypeElement.addEventListener('change', onHouseTypeChange);
 const getHouseAndPriceErrorMessage = () => {
   const houseType = adRoomTypeElement.value;
 
-  return `Обязательно поле. Максимальная цена ${MAX_PRICE} ₽/ночь. Цена не должна быть ниже ${minRoomPrice[houseType]} ₽/ночь`;
+  return `Цена не должна быть ниже ${minRoomPrice[houseType]} ₽/ночь`;
 };
 
-
-pristine.addValidator(adPriceElement, validatePrice, getHouseAndPriceErrorMessage);
+pristine.addValidator(adPriceElement, validateMinHousePrice, getHouseAndPriceErrorMessage);
 
 
 // Валидация времени заезда и выезда
