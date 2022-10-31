@@ -36,7 +36,5 @@ const setActiveFormState = () => {
   });
 };
 
-setActiveFormState();
 
-
-export { adFormElement };
+export { adFormElement, setActiveFormState };

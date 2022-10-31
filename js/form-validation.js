@@ -92,6 +92,8 @@ const validateMinHousePrice = (value) => {
 const onHouseTypeChange = () => {
   const houseType = adRoomTypeElement.value;
   adPriceElement.placeholder = minRoomPrice[houseType];
+  adPriceElement.value = minRoomPrice[houseType];
+
   adPriceElement.min = minRoomPrice[houseType];
   adPriceElement.max = `${MAX_PRICE}`;
   pristine.validate(adRoomTypeElement);
@@ -132,3 +134,4 @@ adFormElement.addEventListener('submit', (evt) => {
 });
 
 
+export { adPriceElement, MAX_PRICE, adRoomTypeElement, minRoomPrice };

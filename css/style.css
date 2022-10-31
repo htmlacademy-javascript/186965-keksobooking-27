@@ -1057,3 +1057,7 @@ fieldset {
   color:red;
   font-weight: 700;
 }
+
+.ad-form__slider {
+  margin-top: 10px;
+}
