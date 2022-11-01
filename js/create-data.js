@@ -70,6 +70,6 @@ const createSimilarAd = (amount) => {
 
 };
 
-createSimilarAd(1);
+createSimilarAd(10);
 
 export { createSimilarAd, similarAds };

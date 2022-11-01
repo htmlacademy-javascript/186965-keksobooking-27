@@ -11,7 +11,6 @@ const houseCompare = {
 };
 
 const adTemplateElement = document.querySelector('#card').content.querySelector('.popup'); // шаблон карточки объявления
-const similarAdsListElement = document.querySelector('#map-canvas'); // куда будет вставляться похожие объявления
 
 
 const createHouseCapacityDescription = (item, element) => {
@@ -86,5 +85,8 @@ similarAds.forEach((ad) => {
 
   adElement.querySelector('.popup__avatar').src = ad.author.avatar;
 
-  similarAdsListElement.append(adElement);
+
 });
+
+
+export { createHouseCapacityDescription, checkHouseFeatures, createFlatPhotos };
