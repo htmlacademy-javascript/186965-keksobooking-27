@@ -12,20 +12,34 @@ noUiSlider.create(sliderElement, {
   step: 1,
   connect: 'lower',
   format: {
-    to: (value) => Number.isInteger(value) ? value.toFixed(0) : value.toFixed(1),
+    to: (value) => value.toFixed(0),
     from: (value) => parseFloat(value)
   },
 });
 
 
-sliderElement.noUiSlider.on('update', () => {
+sliderElement.noUiSlider.on('slide', () => {
   adPriceElement.value = sliderElement.noUiSlider.get();
 });
 
 
 adRoomTypeElement.addEventListener('change', () => {
   sliderElement.noUiSlider.updateOptions({
+    range: {
+      'min': minRoomPrice[adRoomTypeElement.value],
+      'max': MAX_PRICE,
+    },
     start: minRoomPrice[adRoomTypeElement.value],
   });
 });
 
+
+adPriceElement.addEventListener('input', () => {
+  sliderElement.noUiSlider.updateOptions({
+    range: {
+      'min': minRoomPrice[adRoomTypeElement.value],
+      'max': MAX_PRICE,
+    },
+    start: adPriceElement.value,
+  });
+});

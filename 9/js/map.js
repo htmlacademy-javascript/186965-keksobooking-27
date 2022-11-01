@@ -8,8 +8,20 @@ const TOKIO_COORDINATES = {
   lng: 139.4130,
 };
 
+const MAIN_ICON_SIZE = {
+  width: 52,
+  length: 52,
+  anchor: 26,
+};
+
+const ICON_SIZE = {
+  width: 40,
+  length: 40,
+  anchor: 20,
+};
+
 const adAddressElement = adFormElement.querySelector('#address');
-adAddressElement.value = ` lat: ${TOKIO_COORDINATES.lat}, lng: ${TOKIO_COORDINATES.lng}`;
+adAddressElement.value = `${TOKIO_COORDINATES.lat}, ${TOKIO_COORDINATES.lng}`;
 
 // Инициализация карты
 const map = L.map('map-canvas')
@@ -30,9 +42,9 @@ L.tileLayer(
 
 // иконка главного маркера
 const mainMarkerIcon = L.icon({
-  iconUrl: '../img/main-pin.svg',
-  iconSize: ['52', '52'],
-  iconAnchor: [26, 52],
+  iconUrl: './img/main-pin.svg',
+  iconSize: [`${MAIN_ICON_SIZE.width}`, `${MAIN_ICON_SIZE.length}`],
+  iconAnchor: [`${MAIN_ICON_SIZE.anchor}`, `${MAIN_ICON_SIZE.length}`],
 });
 
 // Отображение главного маркера на карте
@@ -60,9 +72,9 @@ mainMarker.on('moveend', (evt) => {
 
 //иконки похожих объявлений
 const similarAdMarkersIcon = L.icon({
-  iconUrl: '../img/pin.svg',
-  iconSize: ['40', '40'],
-  iconAnchor: [10, 40],
+  iconUrl: './img/pin.svg',
+  iconSize: [`${ICON_SIZE.width}`, `${ICON_SIZE.length}`],
+  iconAnchor: [`${ICON_SIZE.anchor}`, `${ICON_SIZE.length}`],
 });
 
 
