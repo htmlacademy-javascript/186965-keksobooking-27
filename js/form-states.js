@@ -1,10 +1,10 @@
+
 const adFormElement = document.querySelector('.ad-form');
 const adFormFieldsetElements = adFormElement.querySelectorAll('fieldset');
 
 const mapFilterElement = document.querySelector('.map__filters');
 const mapFilterSelectElements = mapFilterElement.querySelectorAll('.map__filter');
 const mapFilterFieldsetElement = mapFilterElement.querySelector('.map__features');
-
 
 const setInactiveFormState = () => {
   adFormElement.classList.add('ad-form--disabled');

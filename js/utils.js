@@ -1,3 +1,5 @@
+
+
 //Максимум и минимум включаются. Resourse MDN
 function getRandomNumber(min, max) {
   if(min >= max || min < 0 || max < 0) {
@@ -36,6 +38,9 @@ const inflectWord = (number, words) => {
 };
 
 
-export { getRandomNumber, getRandomCoordinate, getRandomArrayElement, inflectWord };
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+
+export { getRandomNumber, getRandomCoordinate, getRandomArrayElement, inflectWord, isEscapeKey };
 
 

@@ -1,11 +1,10 @@
 import { adFormElement } from './form-states.js';
 import { setActiveFormState } from './form-states.js';
-import { similarAds } from './create-data.js';
 import { createHouseCapacityDescription, checkHouseFeatures, createFlatPhotos } from './create-similar-cards.js';
 
 const TOKIO_COORDINATES = {
-  lat: 35.4122,
-  lng: 139.4130,
+  lat: 35.6895,
+  lng: 139.692,
 };
 
 const MAIN_ICON_SIZE = {
@@ -29,7 +28,7 @@ const map = L.map('map-canvas')
   .setView({
     lat: `${TOKIO_COORDINATES.lat}`,
     lng: `${TOKIO_COORDINATES.lng}`,
-  }, 10);
+  }, 12);
 
 
 L.tileLayer(
@@ -65,7 +64,7 @@ mainMarker.on('moveend', (evt) => {
   const latCoordinate = evt.target.getLatLng().lat.toFixed(5);
   const lngCoordinate = evt.target.getLatLng().lng.toFixed(5);
 
-  adAddressElement.value = `lat: ${latCoordinate}, lng: ${lngCoordinate}`;
+  adAddressElement.value = `${latCoordinate}, ${lngCoordinate}`;
 
 });
 
@@ -81,11 +80,12 @@ const similarAdMarkersIcon = L.icon({
 const createMarkerPopup = (marker) => {
   const markerPopupTemplateElement = document.querySelector('#card').content.querySelector('.popup');
 
+
   const markerPopupElement = markerPopupTemplateElement.cloneNode(true);
 
   markerPopupElement.querySelector('.popup__avatar').src = marker.author.avatar;
   markerPopupElement.querySelector('.popup__title').textContent = marker.offer.title;
-  markerPopupElement.querySelector('.popup__text--address').textContent = `${marker.offer.address.lat}, ${marker.offer.address.lng}`;
+  markerPopupElement.querySelector('.popup__text--address').textContent = marker.offer.address;
   markerPopupElement.querySelector('.popup__text--price').textContent = marker.price;
   markerPopupElement.querySelector('.popup__type').textContent = marker.type;
 
@@ -97,7 +97,9 @@ const createMarkerPopup = (marker) => {
 
   markerPopupElement.querySelector('.popup__description').textContent = marker.offer.description;
 
-  createFlatPhotos(marker, markerPopupElement);
+
+  createFlatPhotos(marker.offer.photos, markerPopupElement);
+
 
   return markerPopupElement;
 };
@@ -110,8 +112,8 @@ const markersGroup = L.layerGroup().addTo(map);
 const createMarker = (ad) => {
   const marker = L.marker(
     {
-      lat: ad.offer.address.lat,
-      lng: ad.offer.address.lng
+      lat: ad.location.lat,
+      lng: ad.location.lng
     },
     {
       icon: similarAdMarkersIcon,
@@ -121,6 +123,26 @@ const createMarker = (ad) => {
 };
 
 
-similarAds.forEach((ad) => {
-  createMarker(ad);
-});
+const createSimilarMarkers = (arr) => {
+  arr.forEach((ad) => {
+    createMarker(ad);
+  });
+};
+
+
+const resetMapMainMarker = () => {
+  mainMarker.setLatLng({
+    lat: `${TOKIO_COORDINATES.lat}`,
+    lng: `${TOKIO_COORDINATES.lng}`,
+  });
+
+  map.closePopup();
+
+  map.setView({
+    lat: `${TOKIO_COORDINATES.lat}`,
+    lng: `${TOKIO_COORDINATES.lng}`,
+  }, 12);
+
+};
+
+export { createSimilarMarkers, adAddressElement, TOKIO_COORDINATES, resetMapMainMarker };
