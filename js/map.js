@@ -1,5 +1,5 @@
 import { adFormElement } from './form-states.js';
-import { setActiveFormState, setInactiveFormState } from './form-states.js';
+import { setActiveFormState, setInactiveFormState, setActiveFilterState, setInactiveFilterState } from './form-states.js';
 import { createHouseCapacityDescription, checkHouseFeatures, createFlatPhotos } from './create-similar-cards.js';
 import { getSimilarDataAds } from './fetch-api.js';
 import { showErrorAlert } from './service-messages.js';
@@ -87,9 +87,7 @@ const createMarkerPopup = (marker) => {
 
   markerPopupElement.querySelector('.popup__description').textContent = marker.offer.description;
 
-
   createFlatPhotos(marker.offer.photos, markerPopupElement);
-
 
   return markerPopupElement;
 };
@@ -135,15 +133,19 @@ const resetMapMainMarker = () => {
 
 };
 
+setInactiveFormState();
+setInactiveFilterState();
 
 // Инициализация карты
 map.on('load',
   () => {
+    setActiveFormState();
+
     getSimilarDataAds().then((similarDataAds) => {
-      setActiveFormState();
       createSimilarMarkers(similarDataAds.slice(0, SIMILAR_ADS_AMOUNT));
+      setActiveFilterState();
     }).catch(() => {
-      setInactiveFormState();
+      setInactiveFilterState();
       showErrorAlert('Не удалось загрузить данные. Попробуйте позже');
     });
   })
