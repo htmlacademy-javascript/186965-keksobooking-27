@@ -1,6 +1,8 @@
 import { adFormElement } from './form-states.js';
-import { setActiveFormState } from './form-states.js';
+import { setActiveFormState, setInactiveFormState, setActiveFilterState, setInactiveFilterState } from './form-states.js';
 import { createHouseCapacityDescription, checkHouseFeatures, createFlatPhotos } from './create-similar-cards.js';
+import { getSimilarDataAds } from './fetch-api.js';
+import { showErrorAlert } from './service-messages.js';
 
 const TOKIO_COORDINATES = {
   lat: 35.6895,
@@ -19,24 +21,11 @@ const ICON_SIZE = {
   anchor: 20,
 };
 
+const map = L.map('map-canvas');
+const SIMILAR_ADS_AMOUNT = 10;
+
 const adAddressElement = adFormElement.querySelector('#address');
 adAddressElement.value = `${TOKIO_COORDINATES.lat}, ${TOKIO_COORDINATES.lng}`;
-
-// Инициализация карты
-const map = L.map('map-canvas')
-  .on('load', setActiveFormState)
-  .setView({
-    lat: `${TOKIO_COORDINATES.lat}`,
-    lng: `${TOKIO_COORDINATES.lng}`,
-  }, 12);
-
-
-L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  },
-).addTo(map);
 
 
 // иконка главного маркера
@@ -47,14 +36,15 @@ const mainMarkerIcon = L.icon({
 });
 
 // Отображение главного маркера на карте
-const mainMarker = L.marker({
-  lat: `${TOKIO_COORDINATES.lat}`,
-  lng: `${TOKIO_COORDINATES.lng}`,
-},
-{
-  draggable: true,
-  icon: mainMarkerIcon
-}
+const mainMarker = L.marker(
+  {
+    lat: `${TOKIO_COORDINATES.lat}`,
+    lng: `${TOKIO_COORDINATES.lng}`,
+  },
+  {
+    draggable: true,
+    icon: mainMarkerIcon
+  }
 );
 
 mainMarker.addTo(map);
@@ -89,7 +79,7 @@ const createMarkerPopup = (marker) => {
   markerPopupElement.querySelector('.popup__text--price').textContent = marker.price;
   markerPopupElement.querySelector('.popup__type').textContent = marker.type;
 
-  createHouseCapacityDescription(marker, markerPopupElement );
+  createHouseCapacityDescription(marker, markerPopupElement);
 
   markerPopupElement.querySelector('.popup__text--time').textContent = `Заезд после ${marker.offer.checkin}, выезд до ${marker.offer.checkout}`;
 
@@ -97,9 +87,7 @@ const createMarkerPopup = (marker) => {
 
   markerPopupElement.querySelector('.popup__description').textContent = marker.offer.description;
 
-
   createFlatPhotos(marker.offer.photos, markerPopupElement);
-
 
   return markerPopupElement;
 };
@@ -144,5 +132,34 @@ const resetMapMainMarker = () => {
   }, 12);
 
 };
+
+setInactiveFormState();
+setInactiveFilterState();
+
+// Инициализация карты
+map.on('load',
+  () => {
+    setActiveFormState();
+
+    getSimilarDataAds().then((similarDataAds) => {
+      createSimilarMarkers(similarDataAds.slice(0, SIMILAR_ADS_AMOUNT));
+      setActiveFilterState();
+    }).catch(() => {
+      setInactiveFilterState();
+      showErrorAlert('Не удалось загрузить данные. Попробуйте позже');
+    });
+  })
+  .setView({
+    lat: `${TOKIO_COORDINATES.lat}`,
+    lng: `${TOKIO_COORDINATES.lng}`,
+  }, 12);
+
+
+L.tileLayer(
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  },
+).addTo(map);
 
 export { createSimilarMarkers, adAddressElement, TOKIO_COORDINATES, resetMapMainMarker };

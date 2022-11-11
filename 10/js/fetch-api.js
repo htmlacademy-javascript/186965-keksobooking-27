@@ -1,16 +1,10 @@
-
-const getSimilarDataAds = (onSuccess, onFail) => {
-  fetch('https://27.javascript.pages.academy/keksobooking/data')
-    .then((response) => {
-      if(!response.ok) {
-        onFail();
-      } else {
-        return response.json();
-      }
-    })
-    .then((similarDataAds) => onSuccess(similarDataAds))
-    .catch(() => onFail());
-};
+const getSimilarDataAds = () => fetch('https://27.javascript.pages.academy/keksobooking/data')
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error('Данные не загрузились');
+    }
+    return response.json();
+  });
 
 
 const sendAdData = (onSuccess, onFail, body) => {
@@ -21,11 +15,12 @@ const sendAdData = (onSuccess, onFail, body) => {
     }
   )
     .then((response) => {
-      if(response.ok) {
+      if (response.ok) {
         onSuccess();
       } else {
         onFail();
-      }})
+      }
+    })
     .catch(() => onFail());
 };
 
