@@ -5,8 +5,8 @@ const sliderElement = document.querySelector('.ad-form__slider');
 
 noUiSlider.create(sliderElement, {
   range: {
-    'min': 0,
-    'max': MAX_PRICE,
+    min: SLIDER_PRICE_START,
+    max: MAX_PRICE,
   },
   start: SLIDER_PRICE_START,
   step: 1,
@@ -26,8 +26,8 @@ sliderElement.noUiSlider.on('slide', () => {
 adRoomTypeElement.addEventListener('change', () => {
   sliderElement.noUiSlider.updateOptions({
     range: {
-      'min': minRoomPrice[adRoomTypeElement.value],
-      'max': MAX_PRICE,
+      min: minRoomPrice[adRoomTypeElement.value],
+      max: MAX_PRICE,
     },
     start: minRoomPrice[adRoomTypeElement.value],
   });
@@ -37,9 +37,12 @@ adRoomTypeElement.addEventListener('change', () => {
 adPriceElement.addEventListener('input', () => {
   sliderElement.noUiSlider.updateOptions({
     range: {
-      'min': minRoomPrice[adRoomTypeElement.value],
-      'max': MAX_PRICE,
+      min: minRoomPrice[adRoomTypeElement.value],
+      max: MAX_PRICE,
     },
     start: adPriceElement.value,
   });
 });
+
+
+export { sliderElement, SLIDER_PRICE_START };

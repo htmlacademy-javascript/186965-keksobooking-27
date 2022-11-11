@@ -1,6 +1,8 @@
+
+
 //Максимум и минимум включаются. Resourse MDN
 function getRandomNumber(min, max) {
-  if(min >= max || min < 0 || max < 0) {
+  if (min >= max || min < 0 || max < 0) {
     return NaN;
   }
 
@@ -12,7 +14,7 @@ function getRandomNumber(min, max) {
 
 
 function getRandomCoordinate(min, max, number) {
-  if(min >= max || min < 0 || max < 0) {
+  if (min >= max || min < 0 || max < 0) {
     return NaN;
   }
 
@@ -36,6 +38,7 @@ const inflectWord = (number, words) => {
 };
 
 
-export { getRandomNumber, getRandomCoordinate, getRandomArrayElement, inflectWord };
+const isEscapeKey = (evt) => evt.key === 'Escape';
 
 
+export { getRandomNumber, getRandomCoordinate, getRandomArrayElement, inflectWord, isEscapeKey };

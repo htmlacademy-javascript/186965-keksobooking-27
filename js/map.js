@@ -1,11 +1,12 @@
 import { adFormElement } from './form-states.js';
-import { setActiveFormState } from './form-states.js';
-import { similarAds } from './create-data.js';
+import { setActiveFormState, setInactiveFormState, setActiveFilterState, setInactiveFilterState } from './form-states.js';
 import { createHouseCapacityDescription, checkHouseFeatures, createFlatPhotos } from './create-similar-cards.js';
+import { getSimilarDataAds } from './fetch-api.js';
+import { showErrorAlert } from './service-messages.js';
 
 const TOKIO_COORDINATES = {
-  lat: 35.4122,
-  lng: 139.4130,
+  lat: 35.6895,
+  lng: 139.692,
 };
 
 const MAIN_ICON_SIZE = {
@@ -20,24 +21,11 @@ const ICON_SIZE = {
   anchor: 20,
 };
 
+const map = L.map('map-canvas');
+const SIMILAR_ADS_AMOUNT = 10;
+
 const adAddressElement = adFormElement.querySelector('#address');
 adAddressElement.value = `${TOKIO_COORDINATES.lat}, ${TOKIO_COORDINATES.lng}`;
-
-// Инициализация карты
-const map = L.map('map-canvas')
-  .on('load', setActiveFormState)
-  .setView({
-    lat: `${TOKIO_COORDINATES.lat}`,
-    lng: `${TOKIO_COORDINATES.lng}`,
-  }, 10);
-
-
-L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  },
-).addTo(map);
 
 
 // иконка главного маркера
@@ -48,14 +36,15 @@ const mainMarkerIcon = L.icon({
 });
 
 // Отображение главного маркера на карте
-const mainMarker = L.marker({
-  lat: `${TOKIO_COORDINATES.lat}`,
-  lng: `${TOKIO_COORDINATES.lng}`,
-},
-{
-  draggable: true,
-  icon: mainMarkerIcon
-}
+const mainMarker = L.marker(
+  {
+    lat: `${TOKIO_COORDINATES.lat}`,
+    lng: `${TOKIO_COORDINATES.lng}`,
+  },
+  {
+    draggable: true,
+    icon: mainMarkerIcon
+  }
 );
 
 mainMarker.addTo(map);
@@ -65,7 +54,7 @@ mainMarker.on('moveend', (evt) => {
   const latCoordinate = evt.target.getLatLng().lat.toFixed(5);
   const lngCoordinate = evt.target.getLatLng().lng.toFixed(5);
 
-  adAddressElement.value = `lat: ${latCoordinate}, lng: ${lngCoordinate}`;
+  adAddressElement.value = `${latCoordinate}, ${lngCoordinate}`;
 
 });
 
@@ -81,15 +70,16 @@ const similarAdMarkersIcon = L.icon({
 const createMarkerPopup = (marker) => {
   const markerPopupTemplateElement = document.querySelector('#card').content.querySelector('.popup');
 
+
   const markerPopupElement = markerPopupTemplateElement.cloneNode(true);
 
   markerPopupElement.querySelector('.popup__avatar').src = marker.author.avatar;
   markerPopupElement.querySelector('.popup__title').textContent = marker.offer.title;
-  markerPopupElement.querySelector('.popup__text--address').textContent = `${marker.offer.address.lat}, ${marker.offer.address.lng}`;
+  markerPopupElement.querySelector('.popup__text--address').textContent = marker.offer.address;
   markerPopupElement.querySelector('.popup__text--price').textContent = marker.price;
   markerPopupElement.querySelector('.popup__type').textContent = marker.type;
 
-  createHouseCapacityDescription(marker, markerPopupElement );
+  createHouseCapacityDescription(marker, markerPopupElement);
 
   markerPopupElement.querySelector('.popup__text--time').textContent = `Заезд после ${marker.offer.checkin}, выезд до ${marker.offer.checkout}`;
 
@@ -97,7 +87,7 @@ const createMarkerPopup = (marker) => {
 
   markerPopupElement.querySelector('.popup__description').textContent = marker.offer.description;
 
-  createFlatPhotos(marker, markerPopupElement);
+  createFlatPhotos(marker.offer.photos, markerPopupElement);
 
   return markerPopupElement;
 };
@@ -110,8 +100,8 @@ const markersGroup = L.layerGroup().addTo(map);
 const createMarker = (ad) => {
   const marker = L.marker(
     {
-      lat: ad.offer.address.lat,
-      lng: ad.offer.address.lng
+      lat: ad.location.lat,
+      lng: ad.location.lng
     },
     {
       icon: similarAdMarkersIcon,
@@ -121,6 +111,55 @@ const createMarker = (ad) => {
 };
 
 
-similarAds.forEach((ad) => {
-  createMarker(ad);
-});
+const createSimilarMarkers = (arr) => {
+  arr.forEach((ad) => {
+    createMarker(ad);
+  });
+};
+
+
+const resetMapMainMarker = () => {
+  mainMarker.setLatLng({
+    lat: `${TOKIO_COORDINATES.lat}`,
+    lng: `${TOKIO_COORDINATES.lng}`,
+  });
+
+  map.closePopup();
+
+  map.setView({
+    lat: `${TOKIO_COORDINATES.lat}`,
+    lng: `${TOKIO_COORDINATES.lng}`,
+  }, 12);
+
+};
+
+setInactiveFormState();
+setInactiveFilterState();
+
+// Инициализация карты
+map.on('load',
+  () => {
+    setActiveFormState();
+
+    getSimilarDataAds().then((similarDataAds) => {
+      createSimilarMarkers(similarDataAds.slice(0, SIMILAR_ADS_AMOUNT));
+      setActiveFilterState();
+    }).catch(() => {
+      setInactiveFilterState();
+      showErrorAlert('Не удалось загрузить данные. Попробуйте позже');
+    });
+  })
+  .setView({
+    lat: `${TOKIO_COORDINATES.lat}`,
+    lng: `${TOKIO_COORDINATES.lng}`,
+  }, 12);
+
+
+L.tileLayer(
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  },
+).addTo(map);
+
+export { createSimilarMarkers, adAddressElement, TOKIO_COORDINATES, resetMapMainMarker };

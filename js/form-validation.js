@@ -1,7 +1,6 @@
 import { adFormElement } from './form-states.js';
 import { inflectWord } from './utils.js';
 
-
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 const MAX_PRICE = 100000;
@@ -92,7 +91,6 @@ const validateMinHousePrice = (value) => {
 const onHouseTypeChange = () => {
   const houseType = adRoomTypeElement.value;
   adPriceElement.placeholder = minRoomPrice[houseType];
-  // adPriceElement.value = minRoomPrice[houseType];
 
   adPriceElement.min = minRoomPrice[houseType];
   adPriceElement.max = `${MAX_PRICE}`;
@@ -125,13 +123,4 @@ adCheckInTimeElement.addEventListener('change', setCheckOutTime);
 adCheckOutTimeElement.addEventListener('change', setCheckInTime);
 
 
-adFormElement.addEventListener('submit', (evt) => {
-  const isValid = pristine.validate();
-
-  if(!isValid) {
-    evt.preventDefault();
-  }
-});
-
-
-export { adPriceElement, MAX_PRICE, adRoomTypeElement, minRoomPrice };
+export { adPriceElement, MAX_PRICE, adRoomTypeElement, minRoomPrice, pristine };
