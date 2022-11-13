@@ -47,4 +47,4 @@ const setActiveFormState = () => {
 };
 
 
-export { adFormElement, setActiveFormState, setInactiveFormState, setInactiveFilterState, setActiveFilterState };
+export { adFormElement, setActiveFormState, setInactiveFormState, setInactiveFilterState, setActiveFilterState, mapFilterElement };

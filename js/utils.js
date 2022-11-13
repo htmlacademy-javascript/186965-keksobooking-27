@@ -1,36 +1,3 @@
-
-
-//Максимум и минимум включаются. Resourse MDN
-function getRandomNumber(min, max) {
-  if (min >= max || min < 0 || max < 0) {
-    return NaN;
-  }
-
-  min = Math.ceil(min);
-  max = Math.floor(max);
-
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-
-function getRandomCoordinate(min, max, number) {
-  if (min >= max || min < 0 || max < 0) {
-    return NaN;
-  }
-
-  min = Math.floor(min);
-  max = Math.floor(max);
-
-  const randomNumber = Math.random() * (max - min + 1) + min; // Максимум и минимум включаются
-  const coordinate = +randomNumber.toFixed(number);
-
-  return coordinate;
-}
-
-
-const getRandomArrayElement = (elements) => elements[getRandomNumber(0, elements.length - 1)];
-
-
 // склонение слов
 const inflectWord = (number, words) => {
   const cases = [2, 0, 1, 1, 1, 2];
@@ -41,4 +8,22 @@ const inflectWord = (number, words) => {
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
 
-export { getRandomNumber, getRandomCoordinate, getRandomArrayElement, inflectWord, isEscapeKey };
+const debounce = (callback, timeoutDelay = 500) => {
+  // Используем замыкания, чтобы id таймаута у нас навсегда приклеился
+  // к возвращаемой функции с setTimeout, тогда мы его сможем перезаписывать
+  let timeoutId;
+
+  return (...rest) => {
+    // Перед каждым новым вызовом удаляем предыдущий таймаут,
+    // чтобы они не накапливались
+    clearTimeout(timeoutId);
+
+    // Затем устанавливаем новый таймаут с вызовом колбэка на ту же задержку
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+
+    // Таким образом цикл «поставить таймаут - удалить таймаут» будет выполняться,
+    // пока действие совершается чаще, чем переданная задержка timeoutDelay
+  };
+};
+
+export { inflectWord, isEscapeKey, debounce };

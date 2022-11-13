@@ -8,6 +8,7 @@ import './fetch-api.js';
 import { sendAdFormData } from './form-submit.js';
 import { showSuccessMessage, showErrorMessage } from './service-messages.js';
 import './form-submit.js';
+import './ads-filter.js';
 
 
 sendAdFormData(
