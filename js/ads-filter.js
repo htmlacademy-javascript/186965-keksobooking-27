@@ -6,6 +6,7 @@ const MAX_PRICE_NUMBER = 50000;
 const MIN_HOUSE_PRICE_VALUE = 'low';
 const MIDDLE_HOUSE_PRICE_VALUE = 'middle';
 const HIGH_PRICE_PRICE_VALUE = 'high';
+const SIMILAR_ADS_AMOUNT = 10;
 
 
 const typeOfHouseElement = mapFilterElement.querySelector('#housing-type');
@@ -27,11 +28,13 @@ const getAllCheckedCheckboxes = () => {
 
 const filterType = (item) => typeOfHouseElement.value === DEFAULT_VALUE || typeOfHouseElement.value === item.offer.type;
 
+
 const filterPrice = (item) =>
   housePriceElement.value === DEFAULT_VALUE ||
   (item.offer.price < LOW_PRICE_NUMBER && housePriceElement.value === MIN_HOUSE_PRICE_VALUE) ||
   (item.offer.price >= LOW_PRICE_NUMBER && item.offer.price <= MAX_PRICE_NUMBER && housePriceElement.value === MIDDLE_HOUSE_PRICE_VALUE) ||
   (item.offer.price > MAX_PRICE_NUMBER && housePriceElement.value === HIGH_PRICE_PRICE_VALUE);
+
 
 const filterRooms = (item) => numberOfRoomsElement.value === DEFAULT_VALUE || +numberOfRoomsElement.value === item.offer.rooms;
 
@@ -50,7 +53,28 @@ const filterFeatures = (item) => {
   return true;
 };
 
-const totalMatch = (data) => data.filter((item) => filterType(item) && filterPrice(item) && filterRooms(item) && filterGuests(item) && filterFeatures(item));
+
+const totalMatch = (data) => {
+  const filteredAds = [];
+
+  for (const item of data) {
+    if (filteredAds.length >= SIMILAR_ADS_AMOUNT) {
+      break;
+    }
+
+    if (
+      filterType(item) &&
+      filterPrice(item) &&
+      filterRooms(item) &&
+      filterGuests(item) &&
+      filterFeatures(item)
+    ) {
+      filteredAds.push(item);
+    }
+  }
+
+  return filteredAds;
+};
 
 
 const filterChange = (cb) => {

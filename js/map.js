@@ -23,10 +23,9 @@ const ICON_SIZE = {
   anchor: 20,
 };
 
-const RERENDER_DELAY = 1000;
+const RERENDER_DELAY = 500;
 
 const map = L.map('map-canvas');
-const SIMILAR_ADS_AMOUNT = 10;
 
 const adAddressElement = adFormElement.querySelector('#address');
 adAddressElement.value = `${TOKIO_COORDINATES.lat}, ${TOKIO_COORDINATES.lng}`;
@@ -81,6 +80,7 @@ const createMarkerPopup = (marker) => {
   markerPopupElement.querySelector('.popup__title').textContent = marker.offer.title;
   markerPopupElement.querySelector('.popup__text--address').textContent = marker.offer.address;
   markerPopupElement.querySelector('.popup__text--price').textContent = `${marker.offer.price} ₽/ночь`;
+
   markerPopupElement.querySelector('.popup__type').textContent = houseCompare[marker.offer.type];
 
   createHouseCapacityDescription(marker, markerPopupElement);
@@ -121,7 +121,6 @@ const createSimilarMarkers = (arr) => {
   const filteredData = totalMatch(arr);
 
   filteredData
-    .slice(0, SIMILAR_ADS_AMOUNT)
     .forEach((ad) => {
       createMarker(ad);
     });
