@@ -4,6 +4,9 @@ import { sendAdData } from './fetch-api.js';
 import { pristine } from './form-validation.js';
 import { adAddressElement, TOKIO_COORDINATES, resetMapMainMarker } from './map.js';
 import { sliderElement } from './price-slider.js';
+import { housePhotoPreviewElement, avatarPreviewElement } from './ads-images.js';
+
+const DEFAULT_IMG = 'img/muffin-grey.svg';
 
 const formSubmitButtonElement = adFormElement.querySelector('.ad-form__submit');
 const formResetButtonElement = adFormElement.querySelector('.ad-form__reset');
@@ -22,7 +25,8 @@ const unblockSubmitButton = () => {
 const resetForm = () => {
   adFormElement.reset();
   adAddressElement.value = `${TOKIO_COORDINATES.lat}, ${TOKIO_COORDINATES.lng}`;
-
+  housePhotoPreviewElement.innerHTML = '';
+  avatarPreviewElement.src = DEFAULT_IMG;
 };
 
 formResetButtonElement.addEventListener('click', (evt) => {
@@ -40,7 +44,7 @@ const sendAdFormData = (onSuccess, onFail) => {
 
     const isValid = pristine.validate();
 
-    if(isValid) {
+    if (isValid) {
       blockSubmitButton();
       sendAdData(
         () => {
