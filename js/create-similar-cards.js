@@ -1,5 +1,14 @@
 import { inflectWord } from './utils.js';
 
+const houseCompare = {
+  'flat': 'Квартира',
+  'bungalow': 'Бунгало',
+  'house': 'Дом',
+  'palace': 'Дворец',
+  'hotel': 'Отель'
+};
+
+
 const createHouseCapacityDescription = (item, element) => {
   const roomsAmount = item.offer.rooms;
   const guestAmount = item.offer.guests;
@@ -13,7 +22,7 @@ const checkHouseFeatures = (features, element) => {
   const featuresList = element.querySelector('.popup__features');
   const allFeatures = featuresList.querySelectorAll('.popup__feature');
 
-  if(features === undefined) {
+  if (features === undefined) {
     featuresList.classList.add('hidden');
   } else {
     const modifiers = features.map((feature) => `popup__feature--${feature}`);
@@ -36,7 +45,7 @@ const createFlatPhotos = (items, element) => {
 
   const photoBoxElement = document.createDocumentFragment();
 
-  if(items === undefined) {
+  if (items === undefined) {
     photoContainerElement.classList.add('hidden');
   } else {
     items.forEach((item) => {
@@ -56,4 +65,4 @@ const createFlatPhotos = (items, element) => {
 };
 
 
-export { createHouseCapacityDescription, checkHouseFeatures, createFlatPhotos};
+export { createHouseCapacityDescription, checkHouseFeatures, createFlatPhotos, houseCompare };

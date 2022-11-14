@@ -1,8 +1,10 @@
 import { adFormElement } from './form-states.js';
 import { setActiveFormState, setInactiveFormState, setActiveFilterState, setInactiveFilterState } from './form-states.js';
-import { createHouseCapacityDescription, checkHouseFeatures, createFlatPhotos } from './create-similar-cards.js';
+import { createHouseCapacityDescription, checkHouseFeatures, createFlatPhotos, houseCompare } from './create-similar-cards.js';
 import { getSimilarDataAds } from './fetch-api.js';
 import { showErrorAlert } from './service-messages.js';
+import { filterChange, totalMatch } from './ads-filter.js';
+import { debounce } from './utils.js';
 
 const TOKIO_COORDINATES = {
   lat: 35.6895,
@@ -21,8 +23,9 @@ const ICON_SIZE = {
   anchor: 20,
 };
 
+const RERENDER_DELAY = 500;
+
 const map = L.map('map-canvas');
-const SIMILAR_ADS_AMOUNT = 10;
 
 const adAddressElement = adFormElement.querySelector('#address');
 adAddressElement.value = `${TOKIO_COORDINATES.lat}, ${TOKIO_COORDINATES.lng}`;
@@ -76,8 +79,8 @@ const createMarkerPopup = (marker) => {
   markerPopupElement.querySelector('.popup__avatar').src = marker.author.avatar;
   markerPopupElement.querySelector('.popup__title').textContent = marker.offer.title;
   markerPopupElement.querySelector('.popup__text--address').textContent = marker.offer.address;
-  markerPopupElement.querySelector('.popup__text--price').textContent = marker.price;
-  markerPopupElement.querySelector('.popup__type').textContent = marker.type;
+  markerPopupElement.querySelector('.popup__text--price').textContent = `${marker.offer.price} ₽/ночь `;
+  markerPopupElement.querySelector('.popup__type').textContent = houseCompare[marker.offer.type];
 
   createHouseCapacityDescription(marker, markerPopupElement);
 
@@ -112,9 +115,16 @@ const createMarker = (ad) => {
 
 
 const createSimilarMarkers = (arr) => {
-  arr.forEach((ad) => {
-    createMarker(ad);
-  });
+  markersGroup.clearLayers();
+
+  const filteredData = totalMatch(arr);
+
+  filteredData
+    .forEach((ad) => {
+      createMarker(ad);
+    });
+
+  map.closePopup();
 };
 
 
@@ -142,8 +152,11 @@ map.on('load',
     setActiveFormState();
 
     getSimilarDataAds().then((similarDataAds) => {
-      createSimilarMarkers(similarDataAds.slice(0, SIMILAR_ADS_AMOUNT));
+      createSimilarMarkers(similarDataAds);
       setActiveFilterState();
+
+      filterChange(debounce(() => createSimilarMarkers(similarDataAds), RERENDER_DELAY));
+
     }).catch(() => {
       setInactiveFilterState();
       showErrorAlert('Не удалось загрузить данные. Попробуйте позже');
