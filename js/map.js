@@ -80,7 +80,7 @@ const createMarkerPopup = (marker) => {
   markerPopupElement.querySelector('.popup__avatar').src = marker.author.avatar;
   markerPopupElement.querySelector('.popup__title').textContent = marker.offer.title;
   markerPopupElement.querySelector('.popup__text--address').textContent = marker.offer.address;
-  markerPopupElement.querySelector('.popup__text--price').textContent = marker.offer.price;
+  markerPopupElement.querySelector('.popup__text--price').textContent = `${marker.offer.price} ₽/ночь`;
   markerPopupElement.querySelector('.popup__type').textContent = houseCompare[marker.offer.type];
 
   createHouseCapacityDescription(marker, markerPopupElement);

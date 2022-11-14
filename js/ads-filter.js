@@ -1,6 +1,12 @@
 import { mapFilterElement } from './form-states.js';
 
 const DEFAULT_VALUE = 'any';
+const LOW_PRICE_NUMBER = 10000;
+const MAX_PRICE_NUMBER = 50000;
+const MIN_HOUSE_PRICE_VALUE = 'low';
+const MIDDLE_HOUSE_PRICE_VALUE = 'middle';
+const HIGH_PRICE_PRICE_VALUE = 'high';
+
 
 const typeOfHouseElement = mapFilterElement.querySelector('#housing-type');
 const housePriceElement = mapFilterElement.querySelector('#housing-price');
@@ -21,7 +27,11 @@ const getAllCheckedCheckboxes = () => {
 
 const filterType = (item) => typeOfHouseElement.value === DEFAULT_VALUE || typeOfHouseElement.value === item.offer.type;
 
-const filterPrice = (item) => housePriceElement.value === DEFAULT_VALUE || (item.offer.price < 10000 && housePriceElement.value === 'low') && (item.offer.price >= 10000 && item.offer.price <= 50000 && housePriceElement.value === 'middle') && (item.offer.price > 50000 && housePriceElement.value === 'high');
+const filterPrice = (item) =>
+  housePriceElement.value === DEFAULT_VALUE ||
+  (item.offer.price < LOW_PRICE_NUMBER && housePriceElement.value === MIN_HOUSE_PRICE_VALUE) ||
+  (item.offer.price >= LOW_PRICE_NUMBER && item.offer.price <= MAX_PRICE_NUMBER && housePriceElement.value === MIDDLE_HOUSE_PRICE_VALUE) ||
+  (item.offer.price > MAX_PRICE_NUMBER && housePriceElement.value === HIGH_PRICE_PRICE_VALUE);
 
 const filterRooms = (item) => numberOfRoomsElement.value === DEFAULT_VALUE || +numberOfRoomsElement.value === item.offer.rooms;
 
