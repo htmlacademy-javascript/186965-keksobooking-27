@@ -1,6 +1,7 @@
 import { mapFilterElement } from './form-states.js';
 
 const DEFAULT_VALUE = 'any';
+const SIMILAR_ADS_AMOUNT = 10;
 
 const typeOfHouseElement = mapFilterElement.querySelector('#housing-type');
 const housePriceElement = mapFilterElement.querySelector('#housing-price');
@@ -21,7 +22,7 @@ const getAllCheckedCheckboxes = () => {
 
 const filterType = (item) => typeOfHouseElement.value === DEFAULT_VALUE || typeOfHouseElement.value === item.offer.type;
 
-const filterPrice = (item) => housePriceElement.value === DEFAULT_VALUE || (item.offer.price < 10000 && housePriceElement.value === 'low') && (item.offer.price >= 10000 && item.offer.price <= 50000 && housePriceElement.value === 'middle') && (item.offer.price > 50000 && housePriceElement.value === 'high');
+const filterPrice = (item) => housePriceElement.value === DEFAULT_VALUE || (item.offer.price < 10000 && housePriceElement.value === 'low') || (item.offer.price >= 10000 && item.offer.price <= 50000 && housePriceElement.value === 'middle') || (item.offer.price > 50000 && housePriceElement.value === 'high');
 
 const filterRooms = (item) => numberOfRoomsElement.value === DEFAULT_VALUE || +numberOfRoomsElement.value === item.offer.rooms;
 
@@ -40,7 +41,28 @@ const filterFeatures = (item) => {
   return true;
 };
 
-const totalMatch = (data) => data.filter((item) => filterType(item) && filterPrice(item) && filterRooms(item) && filterGuests(item) && filterFeatures(item));
+
+const totalMatch = (data) => {
+  const filteredAds = [];
+
+  for (const item of data) {
+    if (filteredAds.length >= SIMILAR_ADS_AMOUNT) {
+      break;
+    }
+
+    if (
+      filterType(item) &&
+      filterPrice(item) &&
+      filterRooms(item) &&
+      filterGuests(item) &&
+      filterFeatures(item)
+    ) {
+      filteredAds.push(item);
+    }
+  }
+
+  return filteredAds;
+};
 
 
 const filterChange = (cb) => {
