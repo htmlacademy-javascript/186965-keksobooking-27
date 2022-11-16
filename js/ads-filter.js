@@ -83,4 +83,8 @@ const filterChange = (cb) => {
   });
 };
 
-export { totalMatch, filterChange };
+const resetFormFilters = () => {
+  mapFilterElement.reset();
+};
+
+export { totalMatch, filterChange, resetFormFilters };
