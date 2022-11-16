@@ -152,16 +152,17 @@ map.on('load',
   () => {
     setActiveFormState();
 
-    getSimilarDataAds().then((similarDataAds) => {
-      createSimilarMarkers(similarDataAds);
-      setActiveFilterState();
+    getSimilarDataAds(
+      (similarDataAds) => {
+        createSimilarMarkers(similarDataAds);
+        setActiveFilterState();
 
-      filterChange(debounce(() => createSimilarMarkers(similarDataAds), RERENDER_DELAY));
-
-    }).catch(() => {
-      setInactiveFilterState();
-      showErrorAlert('Не удалось загрузить данные. Попробуйте позже');
-    });
+        filterChange(debounce(() => createSimilarMarkers(similarDataAds), RERENDER_DELAY));
+      },
+      () => {
+        setInactiveFilterState();
+        showErrorAlert('Не удалось загрузить данные. Попробуйте позже');
+      });
   })
   .setView({
     lat: `${TOKIO_COORDINATES.lat}`,

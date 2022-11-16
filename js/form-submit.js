@@ -1,10 +1,12 @@
 
 import { adFormElement } from './form-states.js';
-import { sendAdData } from './fetch-api.js';
+import { getSimilarDataAds, sendAdData } from './fetch-api.js';
 import { pristine } from './form-validation.js';
-import { adAddressElement, TOKIO_COORDINATES, resetMapMainMarker } from './map.js';
+import { adAddressElement, TOKIO_COORDINATES, resetMapMainMarker, createSimilarMarkers } from './map.js';
 import { sliderElement } from './price-slider.js';
 import { housePhotoPreviewElement, avatarPreviewElement } from './ads-images.js';
+import { showErrorAlert } from './service-messages.js';
+import { resetFormFilters } from './ads-filter.js';
 
 const DEFAULT_IMG = 'img/muffin-grey.svg';
 
@@ -35,6 +37,9 @@ formResetButtonElement.addEventListener('click', (evt) => {
   resetForm();
   resetMapMainMarker();
   sliderElement.noUiSlider.reset();
+  resetFormFilters();
+  getSimilarDataAds(createSimilarMarkers, showErrorAlert);
+
 });
 
 // Отправка формы
@@ -53,6 +58,8 @@ const sendAdFormData = (onSuccess, onFail) => {
           resetMapMainMarker();
           sliderElement.noUiSlider.reset();
           resetForm();
+          resetFormFilters();
+          getSimilarDataAds(createSimilarMarkers, showErrorAlert);
         },
         () => {
           unblockSubmitButton();
