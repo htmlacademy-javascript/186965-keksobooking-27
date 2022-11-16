@@ -91,7 +91,7 @@
             <div class="ad-form__field">
               <input type="file" id="avatar" name="avatar" class="ad-form-header__input visually-hidden"
                 accept="image/png, image/jpeg, image/jpg">
-              <label class="ad-form-header__drop-zone" for="avatar" required>Загрузить<br>фото...</label>
+              <label class="ad-form-header__drop-zone" for="avatar">Загрузить<br>фото...</label>
             </div>
             <p class="ad-form-header__info">Заполните все обязательные поля, назначьте цену, загрузите аватар и фото
               жилья. Придумайте интересное описание. Оно сделает объявление более живым и привлекательным. Получившееся
@@ -100,8 +100,7 @@
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="title">Заголовок объявления</label>
-          <input id="title" name="title" type="text" placeholder="Милая, уютная квартирка в центре Токио" required
-            data-pristine-required-message="Обязательное поле">
+          <input id="title" name="title" type="text" placeholder="Милая, уютная квартирка в центре Токио">
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="address">Адрес (координаты)</label>
@@ -186,8 +185,8 @@
           <label class="ad-form__label">Фотография жилья</label>
           <div class="ad-form__photo-container">
             <div class="ad-form__upload">
-              <input type="file" id="images" name="images" class="ad-form__input visually-hidden" required
-                data-pristine-required-message="Обязательное поле" accept="image/png, image/jpeg, image/jpg">
+              <input type="file" id="images" name="images" class="ad-form__input visually-hidden"
+                accept="image/png, image/jpeg, image/jpg">
               <label for="images" class="ad-form__drop-zone">Загрузить<br>фото...</label>
             </div>
             <div class="ad-form__photo"></div>
